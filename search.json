@@ -1,0 +1,23 @@
+[
+  {
+    "objectID": "posts/nba-bench-points-important/index.html",
+    "href": "posts/nba-bench-points-important/index.html",
+    "title": "How important are bench players in the NBA REALLY?",
+    "section": "",
+    "text": "Code\nlibrary(tidyverse)\n\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.6\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.1     ✔ tibble    3.3.1\n✔ lubridate 1.9.4     ✔ tidyr     1.3.2\n✔ purrr     1.2.1     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\nCode\nlibrary(hoopR)\n\n\nWarning: package 'hoopR' was built under R version 4.5.3\n\n\nAmong all the discourse that surrounds the NBA, most people tend to overlook the bench players."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "Hey there! I’m Nick and I have some thoughts about sports. Mine tend to come in the shower."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "nickssportsblog",
+    "section": "",
+    "text": "How important are bench players in the NBA REALLY?\n\n\n\nnba\n\nbasketball\n\nstats\n\n\n\n\n\n\n\n\n\nApr 10, 2026\n\n\nNick Clark\n\n\n\n\n\nNo matching items"
+  }
+]
