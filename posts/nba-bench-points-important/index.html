@@ -354,6 +354,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
+<p>Among all the discourse that surrounds the NBA, most people tend to overlook the bench players. But they do matter, right? I mean, why else would the NBA have a Sixth Man of the Year award? A lot of people might say that having a deep bench is important for winning championships, while others will say that an All-Star starting five is what matters. So let’s figure out just how important bench players are in the NBA.</p>
+<p>One of the most important things a bench player can do is come into the game and help produce points. To do this, we are going to be looking at the past 20 seasons of NBA basketball and see how many points that bench players contributed. We will be using hoopR to pull the total points scored by bench players since 2005.</p>
+<p>The first question that we’ll ask is how bench scoring has changed over the course of 20 years. So here is what has changed.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -361,10 +364,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 <div class="cell-output cell-output-stderr">
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.4     ✔ readr     2.1.6
+✔ dplyr     1.2.1     ✔ readr     2.2.0
 ✔ forcats   1.0.1     ✔ stringr   1.6.0
-✔ ggplot2   4.0.1     ✔ tibble    3.3.1
-✔ lubridate 1.9.4     ✔ tidyr     1.3.2
+✔ ggplot2   4.0.2     ✔ tibble    3.3.1
+✔ lubridate 1.9.5     ✔ tidyr     1.3.2
 ✔ purrr     1.2.1     
 ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ✖ dplyr::filter() masks stats::filter()
@@ -373,13 +376,719 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(hoopR)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(hoopR)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>nba_player_stats <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/nba_player_stats.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'hoopR' was built under R version 4.5.3</code></pre>
+<pre><code>Rows: 718434 Columns: 57
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (26): athlete_display_name, team_name, team_location, team_short_displa...
+dbl  (24): game_id, season, season_type, athlete_id, team_id, minutes, field...
+lgl   (5): starter, ejected, did_not_play, active, team_winner
+dttm  (1): game_date_time
+date  (1): game_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>team_stats <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/team_stats.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 53806 Columns: 57
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (21): team_uid, team_slug, team_location, team_name, team_abbreviation,...
+dbl  (33): game_id, season, season_type, team_id, team_score, assists, block...
+lgl   (1): team_winner
+dttm  (1): game_date_time
+date  (1): game_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>bench_points <span class="ot">&lt;-</span> nba_player_stats <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(starter <span class="sc">==</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(did_not_play <span class="sc">==</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(team_name) <span class="sc">|&gt;</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total_bench_points =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(total_bench_points <span class="sc">&gt;=</span> <span class="dv">6000</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(total_bench_points))</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>bench_points_over_time <span class="ot">&lt;-</span> nba_player_stats <span class="sc">|&gt;</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(starter <span class="sc">==</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(did_not_play <span class="sc">==</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(season) <span class="sc">|&gt;</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total_bench_points =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(total_bench_points <span class="sc">&gt;=</span> <span class="dv">6000</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(total_bench_points))</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>team_wins <span class="ot">&lt;-</span> team_stats <span class="sc">|&gt;</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(team_winner <span class="sc">==</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(team_name) <span class="sc">|&gt;</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total_wins =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(total_wins <span class="sc">&gt;=</span> <span class="dv">450</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(total_wins))</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>logs <span class="ot">&lt;-</span> <span class="fu">left_join</span>(team_wins, bench_points)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Joining with `by = join_by(team_name)`</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="at">data=</span>bench_points_over_time, <span class="fu">aes</span>(<span class="at">x=</span>season, <span class="at">y=</span>total_bench_points)) <span class="sc">+</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Season"</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Total Bench Points"</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"A Big Change"</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Bench point production dropped significantly after 2011 and has not risen since."</span>,</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Source: SportsDataVerse | By Nick Clark"</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">+</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
 </div>
-<p>Among all the discourse that surrounds the NBA, most people tend to overlook the bench players.</p>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> logs, <span class="fu">aes</span>(<span class="at">x=</span>total_wins, <span class="at">y=</span>total_bench_points)) <span class="sc">+</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">data =</span> logs, <span class="fu">aes</span>(<span class="at">x=</span>total_wins, <span class="at">y=</span>total_bench_points), <span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Bench Points"</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Wins"</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"A good bench makes the difference"</span>,</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Teams that have a high scoring bench have more wins over fifteen years than teams that don't"</span>,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Source: SportsDataVerse | By Nick Clark"</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>),</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-1-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>season_rankings_data <span class="ot">&lt;-</span> nba_player_stats <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(starter <span class="sc">==</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(did_not_play <span class="sc">==</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(team_name, season) <span class="sc">|&gt;</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">season_bench_points =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(season_bench_points))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has regrouped the output.
+ℹ Summaries were computed grouped by team_name and season.
+ℹ Output is grouped by team_name.
+ℹ Use `summarise(.groups = "drop_last")` to silence this message.
+ℹ Use `summarise(.by = c(team_name, season))` for per-operation grouping
+  (`?dplyr::dplyr_by`) instead.</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>top_bench <span class="ot">&lt;-</span> season_rankings_data <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(team_name, season, season_bench_points) <span class="sc">|&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(<span class="sc">-</span>team_name), as.numeric) <span class="sc">|&gt;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(team_name) <span class="sc">|&gt;</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">Team =</span> team_name) <span class="sc">|&gt;</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">BenchPointsScored =</span> season_bench_points) <span class="sc">|&gt;</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">Season =</span> season) <span class="sc">|&gt;</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Team, BenchPointsScored, Season) <span class="sc">|&gt;</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(BenchPointsScored)) <span class="sc">|&gt;</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>top_bench_new <span class="ot">&lt;-</span> top_bench <span class="sc">|&gt;</span> <span class="fu">top_n</span>(<span class="at">wt =</span> BenchPointsScored, <span class="at">n =</span> <span class="dv">10</span>)</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>top_bench_new <span class="sc">|&gt;</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">|&gt;</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">BenchPointsScored =</span> <span class="st">"Bench Points"</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Teams that represent a bygone era of basketball"</span>,</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"The Heat had the highest scoring benches in recent history before losing to the Mavericks in the Finals, who also had a high scoring bench."</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> <span class="fu">tab_style</span>(</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="fu">cell_text</span>(<span class="at">color =</span> <span class="st">"black"</span>, <span class="at">weight =</span> <span class="st">"bold"</span>, <span class="at">align =</span> <span class="st">"left"</span>),</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_title</span>(<span class="st">"title"</span>)</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> <span class="fu">tab_style</span>(</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="fu">cell_text</span>(<span class="at">color =</span> <span class="st">"black"</span>, <span class="at">align =</span> <span class="st">"left"</span>),</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_title</span>(<span class="st">"subtitle"</span>)</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_source_note</span>(</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">source_note =</span> <span class="fu">md</span>(<span class="st">"**By:** Nick Clark | **Source:** hoopR: The SportsDataverse's R Package for Men's Basketball Data"</span>)</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>     <span class="at">locations =</span> <span class="fu">cells_column_labels</span>(<span class="at">columns =</span> <span class="fu">everything</span>()),</span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>     <span class="at">style =</span> <span class="fu">list</span>(</span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>       <span class="fu">cell_borders</span>(<span class="at">sides =</span> <span class="st">"bottom"</span>, <span class="at">weight =</span> <span class="fu">px</span>(<span class="dv">3</span>)),</span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>       <span class="fu">cell_text</span>(<span class="at">weight =</span> <span class="st">"bold"</span>, <span class="at">size=</span><span class="dv">12</span>)</span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>     )</span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>     ) <span class="sc">|&gt;</span></span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_style</span>(</span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="fu">list</span>(</span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cell_fill</span>(<span class="at">color =</span> <span class="st">"#98002E"</span>),</span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>      <span class="fu">cell_text</span>(<span class="at">color =</span> <span class="st">"white"</span>)</span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>      ),</span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">locations =</span> <span class="fu">cells_body</span>(</span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>      <span class="at">rows =</span> Team <span class="sc">==</span> <span class="st">"Heat"</span>)</span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="chebcqaqja" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#chebcqaqja table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#chebcqaqja thead, #chebcqaqja tbody, #chebcqaqja tfoot, #chebcqaqja tr, #chebcqaqja td, #chebcqaqja th {
+  border-style: none;
+}
+
+#chebcqaqja p {
+  margin: 0;
+  padding: 0;
+}
+
+#chebcqaqja .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#chebcqaqja .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#chebcqaqja .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#chebcqaqja .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#chebcqaqja .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#chebcqaqja .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#chebcqaqja .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#chebcqaqja .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#chebcqaqja .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#chebcqaqja .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#chebcqaqja .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#chebcqaqja .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#chebcqaqja .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#chebcqaqja .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#chebcqaqja .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#chebcqaqja .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#chebcqaqja .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#chebcqaqja .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#chebcqaqja .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#chebcqaqja .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#chebcqaqja .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#chebcqaqja .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#chebcqaqja .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#chebcqaqja .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#chebcqaqja .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#chebcqaqja .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#chebcqaqja .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#chebcqaqja .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#chebcqaqja .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#chebcqaqja .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#chebcqaqja .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#chebcqaqja .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#chebcqaqja .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#chebcqaqja .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#chebcqaqja .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#chebcqaqja .gt_left {
+  text-align: left;
+}
+
+#chebcqaqja .gt_center {
+  text-align: center;
+}
+
+#chebcqaqja .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#chebcqaqja .gt_font_normal {
+  font-weight: normal;
+}
+
+#chebcqaqja .gt_font_bold {
+  font-weight: bold;
+}
+
+#chebcqaqja .gt_font_italic {
+  font-style: italic;
+}
+
+#chebcqaqja .gt_super {
+  font-size: 65%;
+}
+
+#chebcqaqja .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#chebcqaqja .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#chebcqaqja .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#chebcqaqja .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#chebcqaqja .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#chebcqaqja .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#chebcqaqja .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#chebcqaqja .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#chebcqaqja div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<td colspan="3" class="gt_heading gt_title gt_font_normal" style="text-align: left; color: #000000; font-weight: bold;">Teams that represent a bygone era of basketball</td>
+</tr>
+<tr class="gt_heading even">
+<td colspan="3" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style="text-align: left; color: #000000;">The Heat had the highest scoring benches in recent history before losing to the Mavericks in the Finals, who also had a high scoring bench.</td>
+</tr>
+<tr class="gt_col_headings header">
+<th id="Team" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="border-bottom-width: 3px; border-bottom-style: solid; border-bottom-color: #000000; font-size: 12; font-weight: bold" scope="col">Team</th>
+<th id="BenchPointsScored" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="border-bottom-width: 3px; border-bottom-style: solid; border-bottom-color: #000000; font-size: 12; font-weight: bold" scope="col">Bench Points</th>
+<th id="Season" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="border-bottom-width: 3px; border-bottom-style: solid; border-bottom-color: #000000; font-size: 12; font-weight: bold" scope="col">Season</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="Team" style="background-color: #98002E; color: #FFFFFF">Heat</td>
+<td class="gt_row gt_right" headers="BenchPointsScored" style="background-color: #98002E; color: #FFFFFF">1053</td>
+<td class="gt_row gt_right" headers="Season" style="background-color: #98002E; color: #FFFFFF">2006</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Team" style="background-color: #98002E; color: #FFFFFF">Heat</td>
+<td class="gt_row gt_right" headers="BenchPointsScored" style="background-color: #98002E; color: #FFFFFF">971</td>
+<td class="gt_row gt_right" headers="Season" style="background-color: #98002E; color: #FFFFFF">2011</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Team">Mavericks</td>
+<td class="gt_row gt_right" headers="BenchPointsScored">957</td>
+<td class="gt_row gt_right" headers="Season">2011</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Team">Cavaliers</td>
+<td class="gt_row gt_right" headers="BenchPointsScored">933</td>
+<td class="gt_row gt_right" headers="Season">2009</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Team">Celtics</td>
+<td class="gt_row gt_right" headers="BenchPointsScored">929</td>
+<td class="gt_row gt_right" headers="Season">2010</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Team">Magic</td>
+<td class="gt_row gt_right" headers="BenchPointsScored">929</td>
+<td class="gt_row gt_right" headers="Season">2009</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Team">Spurs</td>
+<td class="gt_row gt_right" headers="BenchPointsScored">929</td>
+<td class="gt_row gt_right" headers="Season">2007</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Team">Thunder</td>
+<td class="gt_row gt_right" headers="BenchPointsScored">923</td>
+<td class="gt_row gt_right" headers="Season">2011</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Team">Hawks</td>
+<td class="gt_row gt_right" headers="BenchPointsScored">912</td>
+<td class="gt_row gt_right" headers="Season">2009</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Team">Cavaliers</td>
+<td class="gt_row gt_right" headers="BenchPointsScored">903</td>
+<td class="gt_row gt_right" headers="Season">2010</td>
+</tr>
+</tbody><tfoot>
+<tr class="gt_sourcenotes odd">
+<td colspan="3" class="gt_sourcenote"><strong>By:</strong> Nick Clark | <strong>Source:</strong> hoopR: The SportsDataverse’s R Package for Men’s Basketball Data</td>
+</tr>
+</tfoot>
+
+</table>
+
+</div>
+</div>
+</div>
 
 
 
