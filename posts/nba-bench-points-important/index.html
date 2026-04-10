@@ -416,6 +416,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </figure>
 </div>
 </div>
+</div>
+<p>So clearly, we are living in a different era of basketball than in the late 2000s and early 2010s. Since that time, bench players haven’t been contributing as much to a team’s scoring. This means that more load is put on starters to score most, if not all, of a team’s points during the course of a season. Which shouldn’t come as too much of a surprise, given that there are stars in the NBA capable of putting up 40 points a game consistently.</p>
+<p>But does that mean bench players don’t contribute to a team’s success? Is there a connection between the number of bench points scored and the number of games a team wins?</p>
+<div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
@@ -426,7 +430,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Bench Points"</span>,</span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Wins"</span>,</span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"A good bench makes the difference"</span>,</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Teams that have a high scoring bench have more wins over fifteen years than teams that don't"</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Over 20 years, higher scoring benches mean more wins"</span>,</span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Source: SportsDataVerse | By Nick Clark"</span></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
@@ -439,10 +443,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-1-2.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
+</div>
+<p>This is interesting, isn’t it? Even though we’ve seen a steep drop-off in bench scoring production since the early 2010s, teams that have high-scoring benches are still winning more than their competition. So even if the trend has changed, the truth hasn’t.</p>
+<p>But which teams do this the best? Over the past 20 years, which teams in the NBA have had the highest scoring benches every year? And are those teams successful? Meaning did they have deep playoff runs or win a championship? Let’s find out.</p>
+<div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>season_rankings_data <span class="ot">&lt;-</span> nba_player_stats <span class="sc">|&gt;</span></span>
@@ -500,23 +508,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<div id="ylcafrqzha" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ylcafrqzha table {
+<div id="hctdjflopu" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#hctdjflopu table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ylcafrqzha thead, #ylcafrqzha tbody, #ylcafrqzha tfoot, #ylcafrqzha tr, #ylcafrqzha td, #ylcafrqzha th {
+#hctdjflopu thead, #hctdjflopu tbody, #hctdjflopu tfoot, #hctdjflopu tr, #hctdjflopu td, #hctdjflopu th {
   border-style: none;
 }
 
-#ylcafrqzha p {
+#hctdjflopu p {
   margin: 0;
   padding: 0;
 }
 
-#ylcafrqzha .gt_table {
+#hctdjflopu .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -542,12 +550,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#ylcafrqzha .gt_caption {
+#hctdjflopu .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ylcafrqzha .gt_title {
+#hctdjflopu .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -559,7 +567,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#ylcafrqzha .gt_subtitle {
+#hctdjflopu .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -571,7 +579,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#ylcafrqzha .gt_heading {
+#hctdjflopu .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -583,13 +591,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#ylcafrqzha .gt_bottom_border {
+#hctdjflopu .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ylcafrqzha .gt_col_headings {
+#hctdjflopu .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -604,7 +612,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#ylcafrqzha .gt_col_heading {
+#hctdjflopu .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -624,7 +632,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#ylcafrqzha .gt_column_spanner_outer {
+#hctdjflopu .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -636,15 +644,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#ylcafrqzha .gt_column_spanner_outer:first-child {
+#hctdjflopu .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ylcafrqzha .gt_column_spanner_outer:last-child {
+#hctdjflopu .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ylcafrqzha .gt_column_spanner {
+#hctdjflopu .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -656,11 +664,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#ylcafrqzha .gt_spanner_row {
+#hctdjflopu .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ylcafrqzha .gt_group_heading {
+#hctdjflopu .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -686,7 +694,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#ylcafrqzha .gt_empty_group_heading {
+#hctdjflopu .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -701,15 +709,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#ylcafrqzha .gt_from_md > :first-child {
+#hctdjflopu .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ylcafrqzha .gt_from_md > :last-child {
+#hctdjflopu .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ylcafrqzha .gt_row {
+#hctdjflopu .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -728,7 +736,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#ylcafrqzha .gt_stub {
+#hctdjflopu .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -741,7 +749,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#ylcafrqzha .gt_stub_row_group {
+#hctdjflopu .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -755,15 +763,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#ylcafrqzha .gt_row_group_first td {
+#hctdjflopu .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ylcafrqzha .gt_row_group_first th {
+#hctdjflopu .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ylcafrqzha .gt_summary_row {
+#hctdjflopu .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -773,16 +781,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#ylcafrqzha .gt_first_summary_row {
+#hctdjflopu .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ylcafrqzha .gt_first_summary_row.thick {
+#hctdjflopu .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ylcafrqzha .gt_last_summary_row {
+#hctdjflopu .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -792,7 +800,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#ylcafrqzha .gt_grand_summary_row {
+#hctdjflopu .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -802,7 +810,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#ylcafrqzha .gt_first_grand_summary_row {
+#hctdjflopu .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -812,7 +820,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#ylcafrqzha .gt_last_grand_summary_row_top {
+#hctdjflopu .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -822,11 +830,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#ylcafrqzha .gt_striped {
+#hctdjflopu .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ylcafrqzha .gt_table_body {
+#hctdjflopu .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -835,7 +843,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#ylcafrqzha .gt_footnotes {
+#hctdjflopu .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -849,7 +857,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#ylcafrqzha .gt_footnote {
+#hctdjflopu .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -858,7 +866,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#ylcafrqzha .gt_sourcenotes {
+#hctdjflopu .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -872,7 +880,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#ylcafrqzha .gt_sourcenote {
+#hctdjflopu .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -880,72 +888,72 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#ylcafrqzha .gt_left {
+#hctdjflopu .gt_left {
   text-align: left;
 }
 
-#ylcafrqzha .gt_center {
+#hctdjflopu .gt_center {
   text-align: center;
 }
 
-#ylcafrqzha .gt_right {
+#hctdjflopu .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ylcafrqzha .gt_font_normal {
+#hctdjflopu .gt_font_normal {
   font-weight: normal;
 }
 
-#ylcafrqzha .gt_font_bold {
+#hctdjflopu .gt_font_bold {
   font-weight: bold;
 }
 
-#ylcafrqzha .gt_font_italic {
+#hctdjflopu .gt_font_italic {
   font-style: italic;
 }
 
-#ylcafrqzha .gt_super {
+#hctdjflopu .gt_super {
   font-size: 65%;
 }
 
-#ylcafrqzha .gt_footnote_marks {
+#hctdjflopu .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ylcafrqzha .gt_asterisk {
+#hctdjflopu .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ylcafrqzha .gt_indent_1 {
+#hctdjflopu .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ylcafrqzha .gt_indent_2 {
+#hctdjflopu .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ylcafrqzha .gt_indent_3 {
+#hctdjflopu .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ylcafrqzha .gt_indent_4 {
+#hctdjflopu .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ylcafrqzha .gt_indent_5 {
+#hctdjflopu .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ylcafrqzha .katex-display {
+#hctdjflopu .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ylcafrqzha div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#hctdjflopu div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
