@@ -374,24 +374,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>averages_over_time <span class="ot">&lt;-</span> players <span class="sc">|&gt;</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(PTS, Player,Season) <span class="sc">|&gt;</span></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Season)</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>kobe <span class="ot">&lt;-</span> averages_over_time <span class="sc">|&gt;</span> <span class="fu">filter</span>(Player <span class="sc">==</span> <span class="st">"Kobe Bryant"</span>)</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>shaq <span class="ot">&lt;-</span> averages_over_time <span class="sc">|&gt;</span> <span class="fu">filter</span>(Player <span class="sc">==</span> <span class="st">"Shaquille O'Neal"</span>)</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_step</span>(<span class="at">data=</span>averages_over_time, <span class="fu">aes</span>(<span class="at">x=</span>Season, <span class="at">y=</span>PTS, <span class="at">group=</span>Player), <span class="at">color=</span><span class="st">"lightgrey"</span>) <span class="sc">+</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_step</span>(<span class="at">data=</span>kobe, <span class="fu">aes</span>(<span class="at">x=</span>Season, <span class="at">y=</span>PTS, <span class="at">group=</span>Player), <span class="at">color=</span><span class="st">"purple"</span>) <span class="sc">+</span> </span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_step</span>(<span class="at">data=</span>shaq, <span class="fu">aes</span>(<span class="at">x=</span>Season, <span class="at">y=</span>PTS, <span class="at">group=</span>Player), <span class="at">color=</span><span class="st">"blue"</span>) <span class="sc">+</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">breaks=</span><span class="fu">c</span>(<span class="st">"1992-93"</span>,<span class="st">"1997-98"</span>,<span class="st">"2002-03"</span>,<span class="st">"2007-08"</span>,<span class="st">"2012-13"</span>,<span class="st">"2018-19"</span> )) <span class="sc">+</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">x=</span><span class="st">"Season"</span>, </span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">y=</span><span class="st">"Points Per Game"</span>, </span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">title=</span><span class="st">"The Black Mamba is a Killer"</span>, </span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle=</span><span class="st">"Kobe's scoring prime dwarfs Shaq's."</span>, </span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption=</span><span class="st">"Source: Sports-Reference.com | By Nick Clark"</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span> </span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>kobe <span class="ot">&lt;-</span> averages_over_time <span class="sc">|&gt;</span> <span class="fu">filter</span>(Player <span class="sc">==</span> <span class="st">"Kobe Bryant"</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>shaq <span class="ot">&lt;-</span> averages_over_time <span class="sc">|&gt;</span> <span class="fu">filter</span>(Player <span class="sc">==</span> <span class="st">"Shaquille O'Neal"</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_step</span>(<span class="at">data=</span>averages_over_time, <span class="fu">aes</span>(<span class="at">x=</span>Season, <span class="at">y=</span>PTS, <span class="at">group=</span>Player), <span class="at">color=</span><span class="st">"lightgrey"</span>) <span class="sc">+</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_step</span>(<span class="at">data=</span>kobe, <span class="fu">aes</span>(<span class="at">x=</span>Season, <span class="at">y=</span>PTS, <span class="at">group=</span>Player), <span class="at">color=</span><span class="st">"purple"</span>) <span class="sc">+</span> </span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_step</span>(<span class="at">data=</span>shaq, <span class="fu">aes</span>(<span class="at">x=</span>Season, <span class="at">y=</span>PTS, <span class="at">group=</span>Player), <span class="at">color=</span><span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">breaks=</span><span class="fu">c</span>(<span class="st">"1992-93"</span>,<span class="st">"1997-98"</span>,<span class="st">"2002-03"</span>,<span class="st">"2007-08"</span>,<span class="st">"2012-13"</span>,<span class="st">"2018-19"</span> )) <span class="sc">+</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">x=</span><span class="st">"Season"</span>, </span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">y=</span><span class="st">"Points Per Game"</span>, </span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">title=</span><span class="st">"The Black Mamba is a Killer"</span>, </span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle=</span><span class="st">"Kobe's scoring prime dwarfs Shaq's."</span>, </span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption=</span><span class="st">"Source: Sports-Reference.com | By Nick Clark"</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span> </span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -442,19 +439,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">efg =</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">eFG.</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>players_effective <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(kobe_effective, shaq_effective, dirk_effective, ai_effective, duncan_effective, wade_effective)</span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">data=</span>players_effective, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(Player, efg), <span class="at">weight=</span>efg))<span class="sc">+</span></span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">data=</span>shaq_effective, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(Player, efg), <span class="at">weight=</span>efg), <span class="at">fill=</span><span class="st">"blue"</span>)<span class="sc">+</span></span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">data=</span>kobe_effective, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(Player, efg), <span class="at">weight=</span>efg), <span class="at">fill=</span><span class="st">"purple"</span>)<span class="sc">+</span></span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">x=</span><span class="st">"Player"</span>, </span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">y=</span><span class="st">"Effective Field Goal Percentage"</span>, </span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">title=</span><span class="st">"Diesel Dominates"</span>, </span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle=</span><span class="st">"Even when adjusted for threes, Shaq is still more efficient."</span>, </span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption=</span><span class="st">"Source: Sports-Reference.com | By Nick Clark"</span></span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span> </span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">data=</span>players_effective, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(Player, efg), <span class="at">weight=</span>efg))<span class="sc">+</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">data=</span>shaq_effective, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(Player, efg), <span class="at">weight=</span>efg), <span class="at">fill=</span><span class="st">"blue"</span>)<span class="sc">+</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">data=</span>kobe_effective, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(Player, efg), <span class="at">weight=</span>efg), <span class="at">fill=</span><span class="st">"purple"</span>)<span class="sc">+</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">x=</span><span class="st">"Player"</span>, </span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">y=</span><span class="st">"Effective Field Goal Percentage"</span>, </span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">title=</span><span class="st">"Diesel Dominates"</span>, </span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle=</span><span class="st">"Even when adjusted for threes, Shaq is still more efficient."</span>, </span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption=</span><span class="st">"Source: Sports-Reference.com | By Nick Clark"</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span> </span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -530,23 +526,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<div id="zwhadirxql" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#zwhadirxql table {
+<div id="dzuotoodds" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#dzuotoodds table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#zwhadirxql thead, #zwhadirxql tbody, #zwhadirxql tfoot, #zwhadirxql tr, #zwhadirxql td, #zwhadirxql th {
+#dzuotoodds thead, #dzuotoodds tbody, #dzuotoodds tfoot, #dzuotoodds tr, #dzuotoodds td, #dzuotoodds th {
   border-style: none;
 }
 
-#zwhadirxql p {
+#dzuotoodds p {
   margin: 0;
   padding: 0;
 }
 
-#zwhadirxql .gt_table {
+#dzuotoodds .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -572,12 +568,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#zwhadirxql .gt_caption {
+#dzuotoodds .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#zwhadirxql .gt_title {
+#dzuotoodds .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -589,7 +585,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#zwhadirxql .gt_subtitle {
+#dzuotoodds .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -601,7 +597,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#zwhadirxql .gt_heading {
+#dzuotoodds .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -613,13 +609,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#zwhadirxql .gt_bottom_border {
+#dzuotoodds .gt_bottom_border {
   border-bottom-style: none;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#zwhadirxql .gt_col_headings {
+#dzuotoodds .gt_col_headings {
   border-top-style: none;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -634,7 +630,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#zwhadirxql .gt_col_heading {
+#dzuotoodds .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -654,7 +650,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#zwhadirxql .gt_column_spanner_outer {
+#dzuotoodds .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -666,15 +662,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#zwhadirxql .gt_column_spanner_outer:first-child {
+#dzuotoodds .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#zwhadirxql .gt_column_spanner_outer:last-child {
+#dzuotoodds .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#zwhadirxql .gt_column_spanner {
+#dzuotoodds .gt_column_spanner {
   border-bottom-style: none;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -686,11 +682,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#zwhadirxql .gt_spanner_row {
+#dzuotoodds .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#zwhadirxql .gt_group_heading {
+#dzuotoodds .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -716,7 +712,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#zwhadirxql .gt_empty_group_heading {
+#dzuotoodds .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -731,15 +727,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#zwhadirxql .gt_from_md > :first-child {
+#dzuotoodds .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#zwhadirxql .gt_from_md > :last-child {
+#dzuotoodds .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#zwhadirxql .gt_row {
+#dzuotoodds .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -758,7 +754,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#zwhadirxql .gt_stub {
+#dzuotoodds .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -771,7 +767,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#zwhadirxql .gt_stub_row_group {
+#dzuotoodds .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -785,15 +781,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#zwhadirxql .gt_row_group_first td {
+#dzuotoodds .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#zwhadirxql .gt_row_group_first th {
+#dzuotoodds .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#zwhadirxql .gt_summary_row {
+#dzuotoodds .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -803,16 +799,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#zwhadirxql .gt_first_summary_row {
+#dzuotoodds .gt_first_summary_row {
   border-top-style: none;
   border-top-color: #D3D3D3;
 }
 
-#zwhadirxql .gt_first_summary_row.thick {
+#dzuotoodds .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#zwhadirxql .gt_last_summary_row {
+#dzuotoodds .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -822,7 +818,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#zwhadirxql .gt_grand_summary_row {
+#dzuotoodds .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -832,7 +828,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#zwhadirxql .gt_first_grand_summary_row {
+#dzuotoodds .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -842,7 +838,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#zwhadirxql .gt_last_grand_summary_row_top {
+#dzuotoodds .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -852,11 +848,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#zwhadirxql .gt_striped {
+#dzuotoodds .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#zwhadirxql .gt_table_body {
+#dzuotoodds .gt_table_body {
   border-top-style: none;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -865,7 +861,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#zwhadirxql .gt_footnotes {
+#dzuotoodds .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -879,7 +875,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#zwhadirxql .gt_footnote {
+#dzuotoodds .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -888,7 +884,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#zwhadirxql .gt_sourcenotes {
+#dzuotoodds .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -902,7 +898,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#zwhadirxql .gt_sourcenote {
+#dzuotoodds .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -910,72 +906,72 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#zwhadirxql .gt_left {
+#dzuotoodds .gt_left {
   text-align: left;
 }
 
-#zwhadirxql .gt_center {
+#dzuotoodds .gt_center {
   text-align: center;
 }
 
-#zwhadirxql .gt_right {
+#dzuotoodds .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#zwhadirxql .gt_font_normal {
+#dzuotoodds .gt_font_normal {
   font-weight: normal;
 }
 
-#zwhadirxql .gt_font_bold {
+#dzuotoodds .gt_font_bold {
   font-weight: bold;
 }
 
-#zwhadirxql .gt_font_italic {
+#dzuotoodds .gt_font_italic {
   font-style: italic;
 }
 
-#zwhadirxql .gt_super {
+#dzuotoodds .gt_super {
   font-size: 65%;
 }
 
-#zwhadirxql .gt_footnote_marks {
+#dzuotoodds .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#zwhadirxql .gt_asterisk {
+#dzuotoodds .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#zwhadirxql .gt_indent_1 {
+#dzuotoodds .gt_indent_1 {
   text-indent: 5px;
 }
 
-#zwhadirxql .gt_indent_2 {
+#dzuotoodds .gt_indent_2 {
   text-indent: 10px;
 }
 
-#zwhadirxql .gt_indent_3 {
+#dzuotoodds .gt_indent_3 {
   text-indent: 15px;
 }
 
-#zwhadirxql .gt_indent_4 {
+#dzuotoodds .gt_indent_4 {
   text-indent: 20px;
 }
 
-#zwhadirxql .gt_indent_5 {
+#dzuotoodds .gt_indent_5 {
   text-indent: 25px;
 }
 
-#zwhadirxql .katex-display {
+#dzuotoodds .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#zwhadirxql div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#dzuotoodds div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
